@@ -8,7 +8,7 @@ class Course:
         self.credits = credits
         self.prerequisites = prerequisites if prerequisites else []
 
-    def __repr__(self):
+    def __repgitr__(self):
         return f"{self.course_code}: {self.course_name} ({self.credits} credits)"
     
 class Term:
@@ -16,7 +16,7 @@ class Term:
         self.term_name = term_name
         self.courses = set() # A set only allows one of each item
 
-    def add_course(self, course):
+    def add_course(self, course):\
         self.courses.add(course)
 
     def remove_course(self, course):
