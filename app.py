@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, render_template
 from degreeworks.routes.parser import parse_degreeworks_remaining
 from Models.models import Course, Term, Roadmap, Major
 from services.database_service import GTDatabaseService
+from semester_optimizer import build_roadmap
 
 app = Flask(__name__, template_folder='frontend')
 app.config["UPLOAD_FOLDER"] = "uploads"
@@ -154,7 +155,14 @@ def create_sample_roadmap(remaining_courses):
         ]
     
     # Create roadmap using database service
-    roadmap = db_service.create_roadmap_from_courses([c.course_code for c in courses])
+    roadmap = build_roadmap(
+    courses=courses,
+    num_terms=8,   # TODO: decide number of terms from frontend or logic
+    preset_roadmap=None,
+    max_hours=18,
+    min_hours=12,
+    allow_one_parttime=True
+)
     
     # Convert to JSON format
     terms_data = []
