@@ -558,6 +558,13 @@ body {
     font-weight: 500;
 }
 
+.course-gpa {
+    font-size: 0.75rem;
+    color: #059669;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
 /* Summary */
 .summary-card {
     background: linear-gradient(135deg, #ecfdf5, #d1fae5);

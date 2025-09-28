@@ -1,56 +1,121 @@
-/* ---------- script.js (drop-in replacement) ---------- */
+/* ---------- script.js (updated with real GT data) ---------- */
 
-/* Sample course data by major (placeholder) */
+/* Real Georgia Tech majors data */
+const gtMajors = {
+  "College of Computing": [
+    "Computer Science",
+    "Computational Media", 
+    "Computer Engineering"
+  ],
+  "College of Engineering": [
+    "Aerospace Engineering",
+    "Biomedical Engineering",
+    "Chemical and Biomolecular Engineering",
+    "Civil Engineering",
+    "Electrical Engineering",
+    "Environmental Engineering",
+    "Industrial Engineering",
+    "Materials Science and Engineering",
+    "Mechanical Engineering",
+    "Nuclear and Radiological Engineering"
+  ],
+  "College of Sciences": [
+    "Applied Mathematics",
+    "Biology",
+    "Chemistry",
+    "Earth and Atmospheric Sciences",
+    "Mathematics",
+    "Physics",
+    "Psychology"
+  ],
+  "Scheller College of Business": [
+    "Business Administration"
+  ],
+  "Ivan Allen College of Liberal Arts": [
+    "Applied Languages and Intercultural Studies",
+    "Economics",
+    "History, Technology, and Society",
+    "International Affairs",
+    "Literature, Media, and Communication",
+    "Public Policy"
+  ],
+  "College of Design": [
+    "Architecture",
+    "Industrial Design"
+  ]
+};
+
+/* Sample course data by major (will be replaced with real data from API) */
 const coursesByMajor = {
-  computer_science: [
-    'CS 101 - Intro to Programming',
-    'CS 102 - Data Structures',
-    'CS 201 - Algorithms',
-    'CS 202 - Computer Organization',
-    'CS 301 - Database Systems',
-    'CS 302 - Software Engineering',
-    'CS 401 - Operating Systems',
-    'CS 402 - Computer Networks',
-    'MATH 101 - Calculus I',
-    'MATH 102 - Calculus II',
-    'MATH 201 - Linear Algebra',
-    'MATH 202 - Discrete Mathematics'
+  "Computer Science": [
+    'CS 1301 - Introduction to Computing',
+    'CS 1331 - Introduction to Object-Oriented Programming',
+    'CS 1332 - Data Structures and Algorithms',
+    'CS 2050 - Introduction to Discrete Mathematics',
+    'CS 2110 - Computer Organization and Programming',
+    'CS 2200 - Systems and Networks',
+    'CS 2340 - Objects and Design',
+    'CS 3510 - Design and Analysis of Algorithms',
+    'CS 3600 - Introduction to Artificial Intelligence',
+    'CS 4001 - Computing, Society, and Professionalism',
+    'MATH 1552 - Integral Calculus',
+    'MATH 1553 - Introduction to Linear Algebra',
+    'MATH 2550 - Introduction to Multivariable Calculus',
+    'MATH 3012 - Applied Combinatorics',
+    'PHYS 2211 - Introductory Physics I',
+    'PHYS 2212 - Introductory Physics II'
   ],
-  mathematics: [
-    'MATH 101 - Calculus I',
-    'MATH 102 - Calculus II',
-    'MATH 201 - Calculus III',
-    'MATH 202 - Linear Algebra',
-    'MATH 301 - Real Analysis',
-    'MATH 302 - Abstract Algebra',
-    'MATH 401 - Complex Analysis',
-    'MATH 402 - Topology',
-    'STAT 201 - Statistics',
-    'STAT 301 - Probability Theory'
+  "Mathematics": [
+    'MATH 1551 - Differential Calculus',
+    'MATH 1552 - Integral Calculus',
+    'MATH 1553 - Introduction to Linear Algebra',
+    'MATH 2550 - Introduction to Multivariable Calculus',
+    'MATH 3012 - Applied Combinatorics',
+    'MATH 3215 - Introduction to Probability and Statistics',
+    'MATH 3235 - Introduction to Analysis',
+    'MATH 3406 - Introduction to Differential Equations',
+    'MATH 4317 - Analysis I',
+    'MATH 4320 - Abstract Algebra I',
+    'MATH 4330 - Complex Analysis',
+    'MATH 4340 - Topology',
+    'MATH 4640 - Numerical Analysis I',
+    'MATH 4755 - Mathematical Statistics'
   ],
-  engineering: [
-    'ENG 101 - Engineering Fundamentals',
-    'ENG 102 - Engineering Design',
-    'ENG 201 - Mechanics',
-    'ENG 202 - Thermodynamics',
-    'ENG 301 - Circuit Analysis',
-    'ENG 302 - Materials Science',
-    'MATH 101 - Calculus I',
-    'MATH 102 - Calculus II',
-    'PHYS 101 - Physics I',
-    'PHYS 102 - Physics II'
+  "Mechanical Engineering": [
+    'ME 1770 - Introduction to Engineering Graphics and Visualization',
+    'ME 2016 - Computing Techniques',
+    'ME 2110 - Creative Decisions and Design',
+    'ME 2202 - Dynamics of Rigid Bodies',
+    'ME 3017 - System Dynamics and Vibrations',
+    'ME 3057 - Thermodynamics',
+    'ME 3124 - Heat Transfer',
+    'ME 3180 - Machine Design',
+    'ME 3340 - Fluid Mechanics',
+    'ME 3345 - Heat Transfer',
+    'ME 4056 - Control Systems Design',
+    'ME 4210 - Manufacturing Processes and Engineering',
+    'MATH 1552 - Integral Calculus',
+    'MATH 2550 - Introduction to Multivariable Calculus',
+    'PHYS 2211 - Introductory Physics I',
+    'PHYS 2212 - Introductory Physics II'
   ],
-  business: [
-    'BUS 101 - Business Fundamentals',
-    'BUS 102 - Accounting I',
-    'BUS 201 - Marketing',
-    'BUS 202 - Finance',
-    'BUS 301 - Management',
-    'BUS 302 - Operations',
-    'BUS 401 - Strategy',
-    'BUS 402 - Leadership',
-    'ECON 101 - Microeconomics',
-    'ECON 102 - Macroeconomics'
+  "Business Administration": [
+    'MGT 1101 - Introduction to Business',
+    'MGT 2106 - Legal Environment of Business',
+    'MGT 3000 - Financial and Managerial Accounting',
+    'MGT 3101 - Organizational Behavior',
+    'MGT 3102 - Principles of Management',
+    'MGT 3103 - Principles of Marketing',
+    'MGT 3104 - Principles of Finance',
+    'MGT 3105 - Operations Management',
+    'MGT 3106 - Strategic Management',
+    'MGT 3107 - Business Communications',
+    'MGT 3108 - Business Ethics',
+    'ECON 2100 - Economics and Policy',
+    'ECON 2105 - Principles of Macroeconomics',
+    'ECON 2106 - Principles of Microeconomics',
+    'MATH 1552 - Integral Calculus',
+    'MATH 1553 - Introduction to Linear Algebra'
   ]
 };
 
@@ -120,7 +185,7 @@ if (majorSelect) {
   majorSelect.addEventListener('change', e => {
     const major = e.target.value;
     if (major) {
-      populateCourses(major);
+      populateCoursesFromAPI(major);
       qs('#course-selection').classList.remove('hidden');
     } else {
       qs('#course-selection').classList.add('hidden');
@@ -129,7 +194,45 @@ if (majorSelect) {
   });
 }
 
-function populateCourses(major) {
+async function populateCoursesFromAPI(major) {
+  try {
+    const response = await fetch(`/api/courses/${encodeURIComponent(major)}`);
+    if (!response.ok) throw new Error('Failed to fetch courses');
+    
+    const data = await response.json();
+    const allCourses = [...data.core, ...data.elective, ...data.prerequisite];
+    
+    const container = qs('#course-selection .course-grid');
+    container.innerHTML = '';
+    
+    if (allCourses.length === 0) {
+      // Fallback to static data if API fails
+      populateCoursesFromStatic(major);
+      return;
+    }
+    
+    allCourses.forEach((course, index) => {
+      const courseDiv = document.createElement('div');
+      courseDiv.className = 'course-item';
+      const gpaText = course.average_gpa ? ` (GPA: ${course.average_gpa})` : '';
+      courseDiv.innerHTML = `
+        <input type="checkbox" id="course-${index}" value="${course.course_code}" class="course-checkbox">
+        <label for="course-${index}" class="course-label">
+          ${course.course_code} - ${course.course_name}${gpaText}
+        </label>
+      `;
+      container.appendChild(courseDiv);
+    });
+
+    container.addEventListener('change', () => updateSelectedCourses(), { once: true });
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    // Fallback to static data
+    populateCoursesFromStatic(major);
+  }
+}
+
+function populateCoursesFromStatic(major) {
   const courses = coursesByMajor[major] || [];
   const container = qs('#course-selection .course-grid');
   container.innerHTML = '';
@@ -277,6 +380,7 @@ function displayRoadmap(roadmapData) {
             <div class="course-code">${escapeHtml(c.code)}</div>
             <div class="course-name">${escapeHtml(c.name)}</div>
             <div class="course-credits">${Number(c.credits) || 0} credits</div>
+            ${c.average_gpa ? `<div class="course-gpa">Avg GPA: ${Number(c.average_gpa).toFixed(2)}</div>` : ''}
           </div>
         `).join('')}
       </div>
@@ -287,6 +391,17 @@ function displayRoadmap(roadmapData) {
   qs('#total-terms').textContent = roadmapData.summary?.terms_remaining ?? 0;
   qs('#total-credits').textContent = roadmapData.summary?.credits_remaining ?? 0;
   qs('#graduation-date').textContent = roadmapData.summary?.graduation_date ?? 'TBD';
+  
+  // Add estimated GPA if available
+  if (roadmapData.summary?.estimated_gpa) {
+    const gpaElement = document.createElement('div');
+    gpaElement.className = 'stat-item';
+    gpaElement.innerHTML = `
+      <div class="stat-number">${roadmapData.summary.estimated_gpa.toFixed(2)}</div>
+      <div class="stat-label">Estimated GPA</div>
+    `;
+    qs('.summary-stats').appendChild(gpaElement);
+  }
 }
 
 /* ---------- Demo fallback ---------- */
