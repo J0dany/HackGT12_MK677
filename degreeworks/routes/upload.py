@@ -1,25 +1,33 @@
-from fastapi import APIRouter, File, UploadFile
-from fastapi.responses import JSONResponse
-import shutil
 import os
+import shutil
+from flask import Blueprint, request, jsonify
 from routes.parser import parse_degreeworks_remaining
 
-router = APIRouter(prefix="/upload", tags=["upload"])
+upload_bp = Blueprint("upload", __name__)
 
-@router.post("/")
-async def upload_degreeworks(file: UploadFile = File(...)):
+@upload_bp.route("/upload", methods=["POST"])
+def upload_degreeworks():
+    # Ensure uploads folder exists
     if not os.path.exists("uploads"):
         os.makedirs("uploads")
 
-    file_path = f"uploads/{file.filename}"
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # Check if file was uploaded
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
 
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({"error": "No file selected"}), 400
+
+    # Save file to uploads/
+    file_path = os.path.join("uploads", file.filename)
+    file.save(file_path)
+
+    # Parse DegreeWorks PDF
     remaining_courses = parse_degreeworks_remaining(file_path)
 
     if not remaining_courses:
-        return JSONResponse({"error": "Could not detect remaining courses in the PDF"}, status_code=400)
+        return jsonify({"error": "Could not detect remaining courses in the PDF"}), 400
 
-    return JSONResponse({
-        "remaining_courses": remaining_courses
-    })
+    return jsonify({"remaining_courses": remaining_courses})
