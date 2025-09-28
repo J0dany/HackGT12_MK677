@@ -1,10 +1,14 @@
-from fastapi import FastAPI
-from routes.upload import router as upload_router
+from flask import Flask, jsonify
+from routes.upload import upload_bp
 
-app = FastAPI()
+app = Flask(__name__)
 
-app.include_router(upload_router)
+# register blueprint (like FastAPI include_router)
+app.register_blueprint(upload_bp, url_prefix="/api")
 
-@app.get("/")
-async def root():
-    return {"message": "DegreeWorks PDF Remaining Courses Parser API"}
+@app.route("/")
+def root():
+    return jsonify(message="DegreeWorks PDF Remaining Courses Parser API")
+
+if __name__ == "__main__":
+    app.run(debug=True)
