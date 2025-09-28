@@ -2,10 +2,10 @@ import os
 from flask import Flask, request, jsonify, render_template
 
 # Import parser + models
-from parser import parse_degreeworks_remaining
-from models import Course, Term, Roadmap
+from degreeworks.routes.parser import parse_degreeworks_remaining
+from Models.models import Course, Term, Roadmap
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="frontend")
 app.config["UPLOAD_FOLDER"] = "uploads"
 
 @app.route('/')
