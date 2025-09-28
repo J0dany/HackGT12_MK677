@@ -1,6 +1,12 @@
-from flask import Flask, jsonify, render_template
+import os
+from flask import Flask, request, jsonify, render_template
+
+# Import parser + models
+from parser import parse_degreeworks_remaining
+from models import Course, Term, Roadmap
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = "uploads"
 
 @app.route('/')
 def home():
