@@ -6,9 +6,27 @@ app = Flask(__name__)
 def home():
     return render_template("index.html", title = "Home")
 
-@app.route('/api/upload-transcript')
+@app.route('/api/upload-transcript', methods=["GET", "POST"])
 def upload_transcript():
-    return render_template("upload_transcript.html", title = "Upload Transcript")
+    if request.method == "POST":
+        if "file" not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        file = request.files["file"]
+
+        if file.filename == "":
+            return jsonify({"error": "No selected file"}), 400
+
+        os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        file.save(file_path)
+
+        remaining_courses = parse_degreeworks_remaining(file_path)
+
+        return jsonify({"remaining_courses": remaining_courses})
+
+    # GET request just shows upload page
+    return render_template("upload_transcript.html", title="Upload Transcript")
 
 @app.route('/api/manual-entry')
 def manual_entry():
